@@ -1,107 +1,172 @@
 openapi: 3.0.0
 info:
-  title: Грузоперевозки
+  title: Грузовые машины API
+  description: API для управления грузовыми машинами
   version: 1.0.0
-  description: API для управления информацией о машинах, осуществляющих грузоперевозки
+
 paths:
-  /trucks:
+  /cargo-cars:
     post:
-      summary: Добавление новой машины
+      summary: Создать новую грузовую машину
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Truck'
+              $ref: '#/components/schemas/CargoCar'
       responses:
         '201':
-          description: Машина успешно добавлена
-        '400':
-          description: Некорректный запрос
+          description: Машина успешно создана
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CargoCar'
     get:
-      summary: Получение списка всех машин
+      summary: Получить все грузовые машины
       responses:
         '200':
-          description: Список машин успешно получен
+          description: Успешный ответ
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Truck'
-  /trucks/{id}:
+                  $ref: '#/components/schemas/CargoCar'
+
+  /cargo-cars/{id}:
     get:
-      summary: Получение информации о машине по ID
+      summary: Получить информацию о грузовой машине по ID
       parameters:
-        - name: id
-          in: path
-          description: ID машины
+        - in: path
+          name: id
+          description: Идентификатор машины
           required: true
           schema:
             type: integer
+            minimum: 0
       responses:
         '200':
-          description: Информация о машине успешно получена
+          description: Успешный ответ
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Truck'
+                $ref: '#/components/schemas/CargoCar'
         '404':
           description: Машина не найдена
     put:
-      summary: Изменение информации о машине по ID
+      summary: Обновить информацию о грузовой машине по ID
       parameters:
-        - name: id
-          in: path
-          description: ID машины
+        - in: path
+          name: id
+          description: Идентификатор машины
           required: true
           schema:
             type: integer
+            minimum: 0
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Truck'
+              $ref: '#/components/schemas/CargoCarUpdate'
       responses:
         '200':
-          description: Информация о машине успешно изменена
-        '400':
-          description: Некорректный запрос
+          description: Машина успешно обновлена
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CargoCar'
         '404':
           description: Машина не найдена
     delete:
-      summary: Удаление машины по ID
+      summary: Удалить грузовую машину по ID
       parameters:
-        - name: id
-          in: path
-          description: ID машины
+        - in: path
+          name: id
+          description: Идентификатор машины
           required: true
           schema:
             type: integer
+            minimum: 0
       responses:
-        '200':
+        '204':
           description: Машина успешно удалена
         '404':
           description: Машина не найдена
+
 components:
   schemas:
-    Truck:
+    CargoCar:
       type: object
       properties:
-        id:
+        Model:
+          type: string
+        Number:
           type: integer
-          description: Уникальный идентификатор машины
-        model:
-          type: string
-          description: Модель машины
-        brand:
-          type: string
-          description: Бренд марки машины
-        capacity:
-          type: number
-          description: Грузоподъемность машины
+          minimum: 0
+          maximum: 999999
+        Drivers:
+          type: array
+          items:
+            type: object
+            properties:
+              First_Name:
+                type: string
+              Second_Name:
+                type: string
+              Otchestvo:
+                type: string
+              DateOfStart:
+                type: string
+                format: date
       required:
-        - model
-        - brand
-        - capacity
+        - Model
+        - Number
+      example:
+        Model: BMW
+        Number: 90
+        Drivers:
+          - First_Name: Егор
+            Second_Name: Егоров
+            Otchestvo: Егорович
+            DateOfStart: "2022-06-01"
+          - First_Name: Антон
+            Second_Name: Антонов
+            Otchestvo: Антонович
+            DateOfStart: "2023-01-15"
+
+    CargoCarUpdate:
+      type: object
+      properties:
+        Model:
+          type: string
+        Number:
+          type: integer
+          minimum: 0
+          maximum: 999999
+        Drivers:
+          type: array
+          items:
+            type: object
+            properties:
+              First_Name:
+                type: string
+              Second_Name:
+                type: string
+              Otchestvo:
+                type: string
+              DateOfStart:
+                type: string
+                format: date
+      example:
+        Model: Lada
+        Number: 44
+        Drivers:
+          - First_Name: Егор
+            Second_Name: Егоров
+            Otchestvo: Егорович
+            DateOfStart: "2022-06-01"
+          - First_Name: Антон
+            Second_Name: Антонов
+            Otchestvo: Антонович
+            DateOfStart: "2023-01-15"
