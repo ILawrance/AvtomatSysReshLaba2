@@ -1,0 +1,169 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+      "title": "Грузоперевозки",
+      "version": "1.0.0",
+      "description": "API для управления информацией о машинах, осуществляющих грузоперевозки"
+    },
+    "paths": {
+      "/trucks": {
+        "post": {
+          "summary": "Добавление новой машины",
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Truck"
+                }
+              }
+            }
+          },
+          "responses": {
+            "201": {
+              "description": "Машина успешно добавлена"
+            },
+            "400": {
+              "description": "Некорректный запрос"
+            }
+          }
+        },
+        "get": {
+          "summary": "Получение списка всех машин",
+          "responses": {
+            "200": {
+              "description": "Список машин успешно получен",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/Truck"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/trucks/{id}": {
+        "get": {
+          "summary": "Получение информации о машине по ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "ID машины",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Информация о машине успешно получена",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/Truck"
+                  }
+                }
+              }
+            },
+            "404": {
+              "description": "Машина не найдена"
+            }
+          }
+        },
+        "put": {
+          "summary": "Изменение информации о машине по ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "ID машины",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "requestBody": {
+            "required": true,
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Truck"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Информация о машине успешно изменена"
+            },
+            "400": {
+              "description": "Некорректный запрос"
+            },
+            "404": {
+              "description": "Машина не найдена"
+            }
+          }
+        },
+        "delete": {
+          "summary": "Удаление машины по ID",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "description": "ID машины",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Машина успешно удалена"
+            },
+            "404": {
+              "description": "Машина не найдена"
+            }
+          }
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "Truck": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "integer",
+              "description": "Уникальный идентификатор машины"
+            },
+            "model": {
+              "type": "string",
+              "description": "Модель машины"
+            },
+            "brand": {
+              "type": "string",
+              "description": "Бренд марки машины"
+            },
+            "capacity": {
+              "type": "number",
+              "description": "Грузоподъемность машины"
+            }
+          },
+    "required": [
+      "model",
+      "brand",
+      "capacity"
+    ]
+        }
+      }
+    }
+  }
